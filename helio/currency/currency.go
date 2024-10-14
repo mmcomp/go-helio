@@ -3,7 +3,6 @@ package currency
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"math"
 	"net/http"
@@ -38,20 +37,17 @@ func (currencyStr Currency) Load(symbol string) (*Currency, error) {
 	c := http.Client{Timeout: time.Duration(100) * time.Second}
 	resp, err := c.Get("https://api.hel.io/v1/currency/all")
 	if err != nil {
-		fmt.Printf("Error in request: %s", err)
 		return nil, err
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Printf("Error in body reading: %s", err)
 		return nil, err
 	}
 
 	var dat []Currency
 
 	if err = json.Unmarshal(body, &dat); err != nil {
-		fmt.Printf("Error in unmarshal: %s", err)
 		return nil, err
 	}
 
